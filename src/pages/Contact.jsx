@@ -2,12 +2,12 @@ import { Link } from 'react-router-dom'
 
 function Contact() {
   const socialLinks = [
-    { name: 'GitHub', icon: '💻', url: 'https://github.com', color: 'from-gray-700 to-gray-900' },
-    { name: 'LinkedIn', icon: '💼', url: 'https://linkedin.com', color: 'from-blue-600 to-blue-700' },
-    { name: 'Twitter', icon: '🐦', url: 'https://twitter.com', color: 'from-sky-500 to-blue-600' },
-    { name: 'Dribbble', icon: '🎨', url: 'https://dribbble.com', color: 'from-pink-500 to-rose-600' },
-    { name: 'Instagram', icon: '📸', url: 'https://instagram.com', color: 'from-purple-600 to-pink-600' },
-    { name: 'Email', icon: '✉️', url: 'mailto:john@example.com', color: 'from-red-500 to-orange-600' }
+    { name: 'GitHub', icon: '💻', url: 'https://github.com/nardi-js', color: 'from-gray-700 to-gray-900' },
+    { name: 'LinkedIn', icon: '💼', url: 'https://linkedin.com/in/nardi-js', color: 'from-blue-600 to-blue-700' },
+    { name: 'Twitter', icon: '🐦', url: 'https://twitter.com/nardi-js', color: 'from-sky-500 to-blue-600' },
+    { name: 'Dribbble', icon: '🎨', url: 'https://dribbble.com/nardi-js', color: 'from-pink-500 to-rose-600' },
+    { name: 'Instagram', icon: '📸', url: 'https://instagram.com/naa.dev', color: 'from-purple-600 to-pink-600' },
+    { name: 'Email', icon: '✉️', url: 'mailto:700nardi@gmail.com', color: 'from-red-500 to-orange-600' }
   ]
 
   return (
@@ -85,17 +85,17 @@ function Contact() {
             <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-center">
               <div className="text-3xl mb-2">📧</div>
               <p className="text-sm text-gray-600 mb-1">Email</p>
-              <p className="font-medium text-gray-800 text-sm">john@example.com</p>
+              <p className="font-medium text-gray-800 text-sm">700nardi@gmail.com</p>
             </div>
             <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-center">
               <div className="text-3xl mb-2">📱</div>
               <p className="text-sm text-gray-600 mb-1">Phone</p>
-              <p className="font-medium text-gray-800 text-sm">+62 812-3456-7890</p>
+              <p className="font-medium text-gray-800 text-sm">+60 1113223385</p>
             </div>
             <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-center">
               <div className="text-3xl mb-2">📍</div>
               <p className="text-sm text-gray-600 mb-1">Location</p>
-              <p className="font-medium text-gray-800 text-sm">Jakarta, Indonesia</p>
+              <p className="font-medium text-gray-800 text-sm">Kedah, Malaysia</p>
             </div>
           </div>
 

@@ -1,263 +1,237 @@
 import { useParams, Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { db } from '../firebase/config'
+import { collection, query, where, getDocs } from 'firebase/firestore'
+import SEO from '../components/SEO'
 
 function ProjectDetail() {
   const { id } = useParams()
+  const [project, setProject] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  const allProjects = {
-    'ecommerce': {
-      title: 'E-Commerce Platform',
-      subtitle: 'Next-Gen Shopping Experience',
-      description: 'A comprehensive e-commerce solution with AI-powered product recommendations, real-time inventory management, and seamless payment integration.',
-      image: '🛍️',
-      tech: ['React', 'Node.js', 'MongoDB', 'Stripe', 'AWS', 'Redis'],
-      gradient: 'from-purple-400 to-pink-400',
-      features: [
-        'AI-powered product recommendations',
-        'Real-time inventory tracking',
-        'Multiple payment gateway integration',
-        'Advanced search with filters',
-        'Order tracking system',
-        'Customer analytics dashboard'
-      ],
-      results: [
-        { label: 'Conversion Rate', value: '+45%' },
-        { label: 'Page Load Time', value: '1.2s' },
-        { label: 'User Satisfaction', value: '4.8/5' },
-        { label: 'Monthly Active Users', value: '50K+' }
-      ],
-      challenges: 'Scaling the platform to handle Black Friday traffic while maintaining sub-2 second load times.',
-      solution: 'Implemented Redis caching, CDN distribution, and microservices architecture for optimal performance.',
-      duration: '6 months',
-      role: 'Lead Full-Stack Developer',
-      team: '8 members',
-      year: '2024'
-    },
-    'design-system': {
-      title: 'Design System',
-      subtitle: 'Enterprise Component Library',
-      description: 'Comprehensive design system with 100+ reusable components, ensuring brand consistency across all enterprise applications.',
-      image: '🎨',
-      tech: ['React', 'TypeScript', 'Storybook', 'Figma', 'CSS-in-JS'],
-      gradient: 'from-indigo-400 to-purple-400',
-      features: [
-        '100+ reusable components',
-        'Dark mode support',
-        'Accessibility compliant (WCAG 2.1)',
-        'Interactive documentation',
-        'Automated testing suite',
-        'Figma integration'
-      ],
-      results: [
-        { label: 'Development Speed', value: '+60%' },
-        { label: 'Bug Reduction', value: '-40%' },
-        { label: 'Design Consistency', value: '98%' },
-        { label: 'Adoption Rate', value: '100%' }
-      ],
-      challenges: 'Creating a flexible system that works across 20+ different applications with varying requirements.',
-      solution: 'Built a modular, theme-able architecture with comprehensive documentation and migration guides.',
-      duration: '8 months',
-      role: 'Lead UI/UX Developer',
-      team: '5 members',
-      year: '2023'
-    },
-    'saas-dashboard': {
-      title: 'SaaS Dashboard',
-      subtitle: 'Real-Time Analytics Platform',
-      description: 'Advanced analytics dashboard with real-time data visualization, custom reports, and predictive insights for business intelligence.',
-      image: '📊',
-      tech: ['Next.js', 'D3.js', 'PostgreSQL', 'WebSocket', 'Docker'],
-      gradient: 'from-purple-500 to-indigo-500',
-      features: [
-        'Real-time data streaming',
-        'Custom report builder',
-        'Interactive charts & graphs',
-        'Data export in multiple formats',
-        'Role-based access control',
-        'Email alerts & notifications'
-      ],
-      results: [
-        { label: 'Data Processing', value: '10M/day' },
-        { label: 'Response Time', value: '<100ms' },
-        { label: 'Uptime', value: '99.9%' },
-        { label: 'Customer Retention', value: '95%' }
-      ],
-      challenges: 'Processing and visualizing millions of data points in real-time without performance degradation.',
-      solution: 'Implemented data aggregation, WebSocket streaming, and optimized D3.js rendering with virtual scrolling.',
-      duration: '10 months',
-      role: 'Senior Full-Stack Developer',
-      team: '12 members',
-      year: '2023'
-    },
-    'mobile-app': {
-      title: 'Fitness Tracking App',
-      subtitle: 'Your Personal Health Companion',
-      description: 'Cross-platform mobile application for tracking fitness activities, nutrition, and wellness goals with social features.',
-      image: '💪',
-      tech: ['React Native', 'Firebase', 'Redux', 'HealthKit', 'Google Fit'],
-      gradient: 'from-pink-400 to-purple-500',
-      features: [
-        'Activity tracking (steps, calories, distance)',
-        'Nutrition logging with barcode scanner',
-        'Workout plans & video guides',
-        'Social challenges & leaderboards',
-        'Wearable device integration',
-        'Progress analytics & insights'
-      ],
-      results: [
-        { label: 'Downloads', value: '100K+' },
-        { label: 'App Rating', value: '4.7/5' },
-        { label: 'Daily Active Users', value: '25K' },
-        { label: 'Retention Rate', value: '68%' }
-      ],
-      challenges: 'Syncing data across multiple platforms and wearable devices while preserving battery life.',
-      solution: 'Implemented efficient background sync, local caching, and smart data aggregation algorithms.',
-      duration: '12 months',
-      role: 'Mobile App Developer',
-      team: '6 members',
-      year: '2024'
+  useEffect(() => {
+    const loadProject = async () => {
+      try {
+        const projectsRef = collection(db, 'projects')
+        const q = query(projectsRef, where('id', '==', id))
+        const querySnapshot = await getDocs(q)
+        
+        if (!querySnapshot.empty) {
+          const doc = querySnapshot.docs[0]
+          setProject({
+            firestoreId: doc.id, // Save Firestore document ID
+            ...doc.data()
+          })
+        }
+      } catch (error) {
+        console.error('Error loading project:', error)
+      } finally {
+        setLoading(false)
+      }
     }
+
+    loadProject()
+  }, [id])
+
+  if (loading) {
+    return (
+      <section className="min-h-screen flex items-center justify-center py-20">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading project...</p>
+        </div>
+      </section>
+    )
   }
 
-  const project = allProjects[id] || allProjects['ecommerce']
+  if (!project) {
+    return (
+      <section className="min-h-screen flex items-center justify-center py-20">
+        <div className="text-center">
+          <h2 className="text-4xl font-bold text-gray-800 mb-4">Project Not Found</h2>
+          <Link to="/projects" className="text-purple-600 hover:text-purple-700 font-medium">
+            ← Back to Projects
+          </Link>
+        </div>
+      </section>
+    )
+  }
 
   return (
-    <section className="relative min-h-screen py-20">
-      <div className="container mx-auto px-6 max-w-6xl">
-        {/* Back Button */}
+    <>
+      <SEO 
+        title={`${project.title} - Project Detail | Nardi Portfolio`}
+        description={project.subtitle ? `${project.subtitle}. ${project.description}` : project.description}
+        keywords={`${project.title}, ${project.tech?.join(', ')}, project, portfolio, ${project.category}`}
+        canonical={`/projects/${id}`}
+        ogType="article"
+        ogImage={project.image || '/og-image.jpg'}
+      />
+      <section className="min-h-screen py-20 bg-gradient-to-br from-purple-50/30 to-white">
+      <div className="container mx-auto px-6 max-w-5xl">
         <Link 
-          to="/projects" 
-          className="inline-flex items-center gap-2 text-purple-600 hover:text-purple-700 font-medium mb-8 group"
+          to="/projects"
+          className="inline-flex items-center gap-2 text-purple-600 hover:text-purple-700 font-medium mb-8 group transition-all"
         >
           <span className="group-hover:-translate-x-1 transition-transform">←</span>
           Back to Projects
         </Link>
 
-        {/* Hero Section */}
-        <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-12 mb-12 animate-fade-in">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="text-8xl mb-6 animate-float">{project.image}</div>
-              <h1 className="text-5xl font-bold text-gray-800 mb-4">{project.title}</h1>
-              <p className="text-2xl text-purple-600 font-semibold mb-6">{project.subtitle}</p>
-              <p className="text-lg text-gray-600 leading-relaxed">{project.description}</p>
+        <div className={`bg-gradient-to-r ${project.gradient} rounded-3xl p-8 md:p-12 mb-8 shadow-xl animate-fade-in`}>
+          <div className="flex items-center gap-6 mb-6">
+            <div className="text-6xl md:text-8xl">{project.image}</div>
+            <div className="flex-1 text-white">
+              <h1 className="text-4xl md:text-5xl font-bold mb-2">{project.title}</h1>
+              {project.subtitle && <p className="text-xl opacity-90">{project.subtitle}</p>}
             </div>
+          </div>
 
-            <div className="space-y-6">
-              <div className="bg-white rounded-2xl p-6 shadow-lg">
-                <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <span>📅</span> Project Info
-                </h3>
-                <div className="space-y-3 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Duration:</span>
-                    <span className="font-medium text-gray-800">{project.duration}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Role:</span>
-                    <span className="font-medium text-gray-800">{project.role}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Team Size:</span>
-                    <span className="font-medium text-gray-800">{project.team}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Year:</span>
-                    <span className="font-medium text-gray-800">{project.year}</span>
-                  </div>
+          <div className="flex flex-wrap gap-3 mb-6">
+            {(Array.isArray(project.tech) ? project.tech : []).map(tech => (
+              <span key={tech} className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium">
+                {tech}
+              </span>
+            ))}
+          </div>
+
+          {/* GitHub and Live Demo Buttons */}
+          <div className="flex flex-wrap gap-4 pt-4 border-t border-white/20">
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 px-6 py-3 bg-white text-purple-600 rounded-full font-semibold hover:bg-opacity-90 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+              >
+                <span className="text-xl">⚡</span>
+                View on GitHub
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </a>
+            )}
+            
+            {project.liveDemo && (
+              <a
+                href={project.liveDemo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 px-6 py-3 bg-white/20 backdrop-blur-sm text-white border-2 border-white rounded-full font-semibold hover:bg-white hover:text-purple-600 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+              >
+                <span className="text-xl">🌐</span>
+                Live Demo
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </a>
+            )}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-3xl p-8 shadow-xl mb-8 animate-fade-in animation-delay-200">
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">Overview</h2>
+          <p className="text-lg text-gray-700 leading-relaxed">{project.description}</p>
+          
+          {(project.duration || project.role || project.team || project.year) && (
+            <div className="grid md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-gray-200">
+              {project.duration && (
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Duration</p>
+                  <p className="font-semibold text-purple-600">{project.duration}</p>
                 </div>
-              </div>
+              )}
+              {project.role && (
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Role</p>
+                  <p className="font-semibold text-purple-600">{project.role}</p>
+                </div>
+              )}
+              {project.team && (
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Team Size</p>
+                  <p className="font-semibold text-purple-600">{project.team}</p>
+                </div>
+              )}
+              {project.year && (
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Year</p>
+                  <p className="font-semibold text-purple-600">{project.year}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-lg">
-                <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <span>🛠️</span> Tech Stack
+        {(project.features || project.results) && (
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            {project.features && Array.isArray(project.features) && project.features.length > 0 && (
+              <div className="bg-white rounded-3xl p-8 shadow-xl animate-fade-in-up animation-delay-300">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                  <span className="text-3xl">✨</span>
+                  Key Features
                 </h3>
-                <div className="flex flex-wrap gap-2">
-                  {project.tech.map(tech => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full text-sm font-medium"
-                    >
-                      {tech}
-                    </span>
+                <ul className="space-y-3">
+                  {project.features.map((feature, i) => (
+                    <li key={i} className="flex items-start gap-3 text-gray-700">
+                      <span className="text-purple-500 text-xl mt-0.5">•</span>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {project.results && Array.isArray(project.results) && project.results.length > 0 && (
+              <div className="bg-white rounded-3xl p-8 shadow-xl animate-fade-in-up animation-delay-400">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                  <span className="text-3xl">📊</span>
+                  Results & Impact
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {project.results.map((result, i) => (
+                    <div key={i} className="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl">
+                      <p className="text-3xl font-bold text-purple-600 mb-1">{result.value}</p>
+                      <p className="text-sm text-gray-600">{result.label}</p>
+                    </div>
                   ))}
                 </div>
               </div>
-            </div>
+            )}
           </div>
-        </div>
+        )}
 
-        {/* Key Features */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-            <span className="text-4xl">✨</span>
-            Key Features
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {project.features.map((feature, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-              >
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">🚀</span>
-                  <p className="text-gray-700 font-medium">{feature}</p>
-                </div>
-              </div>
-            ))}
+        {(project.challenges || project.solution) && (
+          <div className="bg-white rounded-3xl p-8 shadow-xl mb-8 animate-fade-in-up animation-delay-500">
+            {project.challenges && (
+              <>
+                <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                  <span className="text-3xl">🎯</span>
+                  Challenge
+                </h3>
+                <p className="text-gray-700 mb-6 leading-relaxed">{project.challenges}</p>
+              </>
+            )}
+            
+            {project.solution && (
+              <>
+                <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                  <span className="text-3xl">💡</span>
+                  Solution
+                </h3>
+                <p className="text-gray-700 leading-relaxed">{project.solution}</p>
+              </>
+            )}
           </div>
-        </div>
+        )}
 
-        {/* Results & Impact */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-            <span className="text-4xl">📈</span>
-            Results & Impact
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {project.results.map((result, i) => (
-              <div
-                key={i}
-                className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl p-6 text-center text-white shadow-xl"
-              >
-                <div className="text-4xl font-bold mb-2">{result.value}</div>
-                <div className="text-purple-100">{result.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Challenge & Solution */}
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
-          <div className="bg-white rounded-3xl p-8 shadow-xl">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
-              <span className="text-3xl">🎯</span>
-              Challenge
-            </h2>
-            <p className="text-gray-600 leading-relaxed">{project.challenges}</p>
-          </div>
-
-          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-8 shadow-xl">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
-              <span className="text-3xl">💡</span>
-              Solution
-            </h2>
-            <p className="text-gray-600 leading-relaxed">{project.solution}</p>
-          </div>
-        </div>
-
-        {/* CTA */}
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl p-12 text-center text-white">
-          <h2 className="text-3xl font-bold mb-4">Interested in Working Together?</h2>
-          <p className="text-purple-100 mb-6 text-lg">Let's create something amazing for your next project</p>
+        <div className="flex justify-center">
           <Link
-            to="/contact"
-            className="inline-block px-8 py-4 bg-white text-purple-600 rounded-full font-semibold hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+            to="/projects"
+            className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold text-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
           >
-            Get In Touch
+            <span className="group-hover:-translate-x-1 transition-transform">←</span>
+            View All Projects
           </Link>
         </div>
       </div>
     </section>
+    </>
   )
 }
 

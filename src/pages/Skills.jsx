@@ -1,14 +1,41 @@
 import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { db } from '../firebase/config'
+import { collection, getDocs } from 'firebase/firestore'
 
 function Skills() {
-  const skills = [
-    { name: 'Python', level: 90, color: 'from-blue-400 to-yellow-500' },
-    { name: 'Machine Learning', level: 85, color: 'from-purple-500 to-indigo-600' },
-    { name: 'Data Analysis', level: 88, color: 'from-purple-600 to-pink-600' },
-    { name: 'SQL & Databases', level: 82, color: 'from-indigo-500 to-purple-600' },
-    { name: 'React & JavaScript', level: 80, color: 'from-purple-400 to-purple-500' },
-    { name: 'TensorFlow & PyTorch', level: 78, color: 'from-pink-500 to-purple-600' }
-  ]
+  const [skills, setSkills] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const loadSkills = async () => {
+      try {
+        const skillsSnapshot = await getDocs(collection(db, 'skills'))
+        const skillsData = skillsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        setSkills(skillsData)
+      } catch (error) {
+        console.error('Error loading skills:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadSkills()
+  }, [])
+
+  if (loading) {
+    return (
+      <section className="relative min-h-screen flex items-center justify-center py-20">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading skills...</p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="relative min-h-screen flex items-center py-20 bg-gradient-to-br from-purple-50/30 to-white">

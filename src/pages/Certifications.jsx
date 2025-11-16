@@ -1,59 +1,53 @@
 import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { db } from '../firebase/config'
+import { collection, getDocs } from 'firebase/firestore'
+import SEO from '../components/SEO'
 
 function Certifications() {
-  const certifications = [
-    {
-      id: 'aws-cloud-practitioner',
-      title: 'AWS Certified Cloud Practitioner',
-      issuer: 'Amazon Web Services',
-      date: 'Sep 2024',
-      description: 'Cloud computing fundamentals and AWS services',
-      icon: '☁️'
-    },
-    {
-      id: 'google-data-analytics',
-      title: 'Google Data Analytics Professional Certificate',
-      issuer: 'Google',
-      date: 'Aug 2024',
-      description: 'Data analysis, visualization, and SQL skills',
-      icon: '📊'
-    },
-    {
-      id: 'azure-fundamentals',
-      title: 'Microsoft Azure Fundamentals (AZ-900)',
-      issuer: 'Microsoft',
-      date: 'Jul 2024',
-      description: 'Azure cloud services and solutions',
-      icon: '⚡'
-    },
-    {
-      id: 'meta-database',
-      title: 'Meta Database Engineer',
-      issuer: 'Meta',
-      date: 'Jun 2024',
-      description: 'Database design and optimization',
-      icon: '🗄️'
-    },
-    {
-      id: 'machine-learning',
-      title: 'Machine Learning Specialization',
-      issuer: 'DeepLearning.AI & Stanford',
-      date: 'May 2024',
-      description: 'ML algorithms and neural networks',
-      icon: '🤖'
-    },
-    {
-      id: 'python-data-science',
-      title: 'Python for Data Science',
-      issuer: 'IBM',
-      date: 'Apr 2024',
-      description: 'Python programming for data analysis',
-      icon: '🐍'
+  const [certifications, setCertifications] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const loadCertifications = async () => {
+      try {
+        const certsSnapshot = await getDocs(collection(db, 'certifications'))
+        const certsData = certsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        setCertifications(certsData)
+      } catch (error) {
+        console.error('Error loading certifications:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  ]
+
+    loadCertifications()
+  }, [])
+
+  if (loading) {
+    return (
+      <section className="relative min-h-screen flex items-center justify-center py-20">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading certifications...</p>
+        </div>
+      </section>
+    )
+  }
 
   return (
-    <section className="relative min-h-screen py-20 bg-gradient-to-br from-purple-50/30 to-white">
+    <>
+      <SEO 
+        title="Certifications - Nardi Portfolio | Professional Certifications"
+        description="View my professional certifications in Full Stack Development, Data Science, Cloud Computing, and Machine Learning from leading institutions like AWS, Google, Microsoft, and Meta."
+        keywords="certifications, aws certified, google certified, microsoft azure, professional certificates, data science certifications, full stack certifications"
+        canonical="/certifications"
+        ogType="website"
+      />
+      <section className="relative min-h-screen py-20 bg-gradient-to-br from-purple-50/30 to-white">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent animate-slide-up">
@@ -117,6 +111,7 @@ function Certifications() {
         </div>
       </div>
     </section>
+    </>
   )
 }
 

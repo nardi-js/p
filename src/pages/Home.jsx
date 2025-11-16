@@ -1,8 +1,16 @@
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 
 function Home() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <>
+      <SEO 
+        title="Nardi - Full Stack Developer & Data Scientist Portfolio"
+        description="Welcome to Nardi's portfolio. AI-assisted developer specializing in Full Stack Development, Data Science, Machine Learning, and Cloud Technologies. Building simple, functional tech solutions."
+        keywords="nardi, full stack developer, data scientist, AI developer, machine learning, react, python, portfolio"
+        canonical="/"
+      />
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-purple-50/30 via-white to-pink-50/20" />
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center space-y-8 animate-fade-in">
@@ -46,6 +54,7 @@ function Home() {
       <div className="absolute top-20 left-20 w-72 h-72 bg-purple-300 rounded-full filter blur-3xl opacity-20 animate-pulse-slow" />
       <div className="absolute bottom-20 right-20 w-96 h-96 bg-pink-300 rounded-full filter blur-3xl opacity-20 animate-pulse-slow animation-delay-1000" />
     </section>
+    </>
   )
 }
 

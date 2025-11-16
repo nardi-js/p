@@ -1,150 +1,48 @@
 import { useParams, Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { db } from '../firebase/config'
+import { collection, query, where, getDocs } from 'firebase/firestore'
+import SEO from '../components/SEO'
 
 function CertificationDetail() {
   const { id } = useParams()
+  const [cert, setCert] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  const certifications = {
-    'aws-cloud-practitioner': {
-      title: 'AWS Certified Cloud Practitioner',
-      issuer: 'Amazon Web Services',
-      date: 'September 2024',
-      icon: '☁️',
-      credential: 'CLF-C02',
-      description: 'Comprehensive understanding of AWS Cloud fundamentals, services, and best practices for cloud computing.',
-      skills: ['AWS Services', 'Cloud Computing', 'Security', 'Pricing Models', 'Architecture'],
-      whatLearned: [
-        'Understanding of AWS Cloud concepts and value proposition',
-        'AWS security and compliance fundamentals',
-        'Core AWS services including compute, network, database, and storage',
-        'AWS pricing, account structures, and billing',
-        'AWS Cloud architecture and design principles'
-      ],
-      projects: [
-        'Deployed scalable web applications on AWS EC2',
-        'Configured S3 buckets for static website hosting',
-        'Implemented IAM policies for secure access control'
-      ],
-      relatedSkills: ['Cloud Architecture', 'DevOps', 'Infrastructure as Code', 'Cost Optimization'],
-      image: '🎓'
-    },
-    'google-data-analytics': {
-      title: 'Google Data Analytics Professional Certificate',
-      issuer: 'Google',
-      date: 'August 2024',
-      icon: '📊',
-      credential: 'Professional Certificate',
-      description: 'Comprehensive data analytics program covering data cleaning, analysis, visualization, and SQL.',
-      skills: ['Data Analysis', 'SQL', 'R Programming', 'Tableau', 'Data Visualization'],
-      whatLearned: [
-        'Data cleaning and preparation techniques',
-        'SQL for data extraction and manipulation',
-        'Data visualization using Tableau and R',
-        'Statistical analysis and hypothesis testing',
-        'Creating compelling data stories and presentations'
-      ],
-      projects: [
-        'Analyzed bike-share usage patterns for business insights',
-        'Created interactive Tableau dashboards for sales data',
-        'Performed cohort analysis on customer retention'
-      ],
-      relatedSkills: ['Python', 'Excel', 'Statistics', 'Business Intelligence', 'Data Mining'],
-      image: '📈'
-    },
-    'azure-fundamentals': {
-      title: 'Microsoft Azure Fundamentals (AZ-900)',
-      issuer: 'Microsoft',
-      date: 'July 2024',
-      icon: '⚡',
-      credential: 'AZ-900',
-      description: 'Foundational knowledge of cloud services and how those services are provided with Microsoft Azure.',
-      skills: ['Azure Services', 'Cloud Concepts', 'Security', 'Compliance', 'Pricing'],
-      whatLearned: [
-        'Core Azure services and solutions',
-        'Azure pricing and support models',
-        'Cloud concepts and deployment models',
-        'Security, privacy, and compliance in Azure',
-        'Azure governance and management tools'
-      ],
-      projects: [
-        'Created Azure virtual machines for development',
-        'Configured Azure Storage accounts',
-        'Implemented Azure Active Directory for authentication'
-      ],
-      relatedSkills: ['Cloud Computing', 'PowerShell', 'Azure CLI', 'Networking', 'Security'],
-      image: '☁️'
-    },
-    'meta-database': {
-      title: 'Meta Database Engineer',
-      issuer: 'Meta',
-      date: 'June 2024',
-      icon: '🗄️',
-      credential: 'Professional Certificate',
-      description: 'Advanced database engineering skills including MySQL, Python, and database optimization.',
-      skills: ['MySQL', 'Database Design', 'SQL Optimization', 'Python', 'Data Modeling'],
-      whatLearned: [
-        'Advanced SQL queries and optimization',
-        'Database design and normalization',
-        'Stored procedures and triggers',
-        'Python for database operations',
-        'Database performance tuning and indexing'
-      ],
-      projects: [
-        'Designed normalized database schema for e-commerce',
-        'Optimized slow queries reducing execution time by 60%',
-        'Created automated backup and recovery procedures'
-      ],
-      relatedSkills: ['PostgreSQL', 'MongoDB', 'Data Warehousing', 'ETL', 'Database Administration'],
-      image: '💾'
-    },
-    'machine-learning': {
-      title: 'Machine Learning Specialization',
-      issuer: 'DeepLearning.AI & Stanford',
-      date: 'May 2024',
-      icon: '🤖',
-      credential: 'Specialization Certificate',
-      description: 'Comprehensive machine learning course covering supervised and unsupervised learning, neural networks, and best practices.',
-      skills: ['Machine Learning', 'Neural Networks', 'Python', 'TensorFlow', 'Deep Learning'],
-      whatLearned: [
-        'Supervised learning algorithms (regression, classification)',
-        'Unsupervised learning (clustering, anomaly detection)',
-        'Neural networks and deep learning fundamentals',
-        'Best practices for ML project development',
-        'Model evaluation and hyperparameter tuning'
-      ],
-      projects: [
-        'Built house price prediction model with 92% accuracy',
-        'Created image classifier using neural networks',
-        'Implemented recommendation system using collaborative filtering'
-      ],
-      relatedSkills: ['Python', 'NumPy', 'Pandas', 'Scikit-learn', 'Keras', 'Data Science'],
-      image: '🧠'
-    },
-    'python-data-science': {
-      title: 'Python for Data Science',
-      issuer: 'IBM',
-      date: 'April 2024',
-      icon: '🐍',
-      credential: 'Professional Certificate',
-      description: 'Python programming fundamentals for data science, including libraries like NumPy, Pandas, and Matplotlib.',
-      skills: ['Python', 'NumPy', 'Pandas', 'Matplotlib', 'Data Analysis'],
-      whatLearned: [
-        'Python programming fundamentals',
-        'Data manipulation with Pandas',
-        'Numerical computing with NumPy',
-        'Data visualization with Matplotlib and Seaborn',
-        'Web scraping and API integration'
-      ],
-      projects: [
-        'Analyzed COVID-19 data trends and visualizations',
-        'Built stock price analysis dashboard',
-        'Created automated data pipeline for ETL processes'
-      ],
-      relatedSkills: ['Jupyter', 'Statistics', 'Data Cleaning', 'API Integration', 'Web Scraping'],
-      image: '📊'
+  useEffect(() => {
+    const loadCertification = async () => {
+      try {
+        const certsRef = collection(db, 'certifications')
+        const q = query(certsRef, where('id', '==', id))
+        const querySnapshot = await getDocs(q)
+        
+        if (!querySnapshot.empty) {
+          const doc = querySnapshot.docs[0]
+          setCert({
+            firestoreId: doc.id, // Save Firestore document ID
+            ...doc.data()
+          })
+        }
+      } catch (error) {
+        console.error('Error loading certification:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  }
 
-  const cert = certifications[id]
+    loadCertification()
+  }, [id])
+
+  if (loading) {
+    return (
+      <section className="min-h-screen flex items-center justify-center py-20">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading certification...</p>
+        </div>
+      </section>
+    )
+  }
 
   if (!cert) {
     return (
@@ -160,7 +58,16 @@ function CertificationDetail() {
   }
 
   return (
-    <section className="min-h-screen py-20 bg-gradient-to-br from-purple-50/30 to-white">
+    <>
+      <SEO 
+        title={`${cert.title} - Certification | Nardi Portfolio`}
+        description={`${cert.description} Issued by ${cert.issuer}. ${cert.skills?.join(', ')}.`}
+        keywords={`${cert.title}, ${cert.issuer}, ${cert.skills?.join(', ')}, certification, professional certificate`}
+        canonical={`/certifications/${id}`}
+        ogType="article"
+        ogImage={cert.image || '/og-image.jpg'}
+      />
+      <section className="min-h-screen py-20 bg-gradient-to-br from-purple-50/30 to-white">
       <div className="container mx-auto px-6 max-w-5xl">
         {/* Back Button */}
         <Link 
@@ -180,14 +87,14 @@ function CertificationDetail() {
                 {cert.title}
               </h1>
               <p className="text-xl text-purple-600 font-semibold mb-2">{cert.issuer}</p>
-              <p className="text-gray-600 mb-3">{cert.date} • Credential: {cert.credential}</p>
+              <p className="text-gray-600 mb-3">{cert.date}</p>
               <p className="text-lg text-gray-700 leading-relaxed">{cert.description}</p>
             </div>
           </div>
 
           {/* Skills Tags */}
           <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-200">
-            {cert.skills.map(skill => (
+            {cert.skills?.map(skill => (
               <span
                 key={skill}
                 className="px-4 py-2 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full text-sm font-medium"
@@ -202,62 +109,85 @@ function CertificationDetail() {
         <div className="bg-gradient-to-br from-purple-400 to-pink-400 rounded-3xl p-12 mb-8 shadow-xl animate-fade-in animation-delay-200">
           <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-12 text-center">
             <div className="text-9xl mb-6">{cert.image}</div>
-            <h3 className="text-2xl font-bold text-white mb-2">Certificate of Completion</h3>
-            <p className="text-white/80">Credential ID: {cert.credential}</p>
+            <h3 className="text-2xl font-bold text-white mb-6">Certificate of Completion</h3>
+            
+            {/* Verify Certificate Button */}
+            {cert.credential && (
+              <a
+                href={cert.credential}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 px-8 py-4 bg-white text-purple-600 rounded-full font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 group"
+              >
+                <svg className="w-6 h-6 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                View Credential
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </a>
+            )}
           </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           {/* What I Learned */}
-          <div className="bg-white rounded-3xl p-8 shadow-xl animate-fade-in-up animation-delay-300">
-            <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-              <span className="text-3xl">📚</span>
-              What I Learned
-            </h3>
-            <ul className="space-y-3">
-              {cert.whatLearned.map((item, i) => (
-                <li key={i} className="flex items-start gap-3 text-gray-700">
-                  <span className="text-purple-500 text-xl mt-0.5">✓</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {cert.whatLearned && cert.whatLearned.length > 0 && (
+            <div className="bg-white rounded-3xl p-8 shadow-xl animate-fade-in-up animation-delay-300">
+              <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                <span className="text-3xl">📚</span>
+                What I Learned
+              </h3>
+              <ul className="space-y-3">
+                {cert.whatLearned.map((item, i) => (
+                  <li key={i} className="flex items-start gap-3 text-gray-700">
+                    <span className="text-purple-500 text-xl mt-0.5">✓</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* Projects & Applications */}
-          <div className="bg-white rounded-3xl p-8 shadow-xl animate-fade-in-up animation-delay-400">
-            <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-              <span className="text-3xl">🚀</span>
-              Applied Projects
-            </h3>
-            <ul className="space-y-3">
-              {cert.projects.map((project, i) => (
-                <li key={i} className="flex items-start gap-3 text-gray-700">
-                  <span className="text-pink-500 text-xl mt-0.5">▶</span>
-                  <span>{project}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {cert.projects && cert.projects.length > 0 && (
+            <div className="bg-white rounded-3xl p-8 shadow-xl animate-fade-in-up animation-delay-400">
+              <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                <span className="text-3xl">🚀</span>
+                Applied Projects
+              </h3>
+              <ul className="space-y-3">
+                {cert.projects.map((project, i) => (
+                  <li key={i} className="flex items-start gap-3 text-gray-700">
+                    <span className="text-pink-500 text-xl mt-0.5">▶</span>
+                    <span>{project}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         {/* Related Skills */}
-        <div className="bg-white rounded-3xl p-8 shadow-xl mb-8 animate-fade-in-up animation-delay-500">
-          <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-            <span className="text-3xl">🔗</span>
-            Related Skills & Technologies
-          </h3>
-          <div className="flex flex-wrap gap-3">
-            {cert.relatedSkills.map(skill => (
-              <span
-                key={skill}
-                className="px-5 py-3 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-600 rounded-2xl font-medium border border-purple-200 hover:shadow-lg transition-all"
-              >
-                {skill}
-              </span>
-            ))}
+        {cert.relatedSkills && cert.relatedSkills.length > 0 && (
+          <div className="bg-white rounded-3xl p-8 shadow-xl mb-8 animate-fade-in-up animation-delay-500">
+            <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+              <span className="text-3xl">🔗</span>
+              Related Skills & Technologies
+            </h3>
+            <div className="flex flex-wrap gap-3">
+              {cert.relatedSkills.map(skill => (
+                <span
+                  key={skill}
+                  className="px-5 py-3 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-600 rounded-2xl font-medium border border-purple-200 hover:shadow-lg transition-all"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Navigation Buttons */}
         <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
@@ -284,6 +214,7 @@ function CertificationDetail() {
         </div>
       </div>
     </section>
+    </>
   )
 }
 

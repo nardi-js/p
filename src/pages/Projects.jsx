@@ -1,50 +1,89 @@
 import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { db } from '../firebase/config'
+import { collection, getDocs } from 'firebase/firestore'
+import SEO from '../components/SEO'
 
 function Projects() {
-  const projects = [
-    {
-      id: 'ecommerce',
-      title: 'E-Commerce Platform',
-      description: 'Modern shopping experience with AI recommendations',
-      tech: ['React', 'Node.js', 'MongoDB'],
-      gradient: 'from-purple-400 to-pink-400',
-      icon: '🛍️'
-    },
-    {
-      id: 'design-system',
-      title: 'Design System',
-      description: 'Comprehensive component library for enterprises',
-      tech: ['React', 'Storybook', 'Figma'],
-      gradient: 'from-indigo-400 to-purple-400',
-      icon: '🎨'
-    },
-    {
-      id: 'saas-dashboard',
-      title: 'SaaS Dashboard',
-      description: 'Analytics platform with real-time data visualization',
-      tech: ['Next.js', 'D3.js', 'PostgreSQL'],
-      gradient: 'from-purple-500 to-indigo-500',
-      icon: '📊'
-    },
-    {
-      id: 'mobile-app',
-      title: 'Fitness Tracking App',
-      description: 'Cross-platform fitness tracking application',
-      tech: ['React Native', 'Firebase', 'Redux'],
-      gradient: 'from-pink-400 to-purple-500',
-      icon: '💪'
+  const [activeCategory, setActiveCategory] = useState('all')
+  const [projects, setProjects] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const loadProjects = async () => {
+      try {
+        const projectsSnapshot = await getDocs(collection(db, 'projects'))
+        const projectsData = projectsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        setProjects(projectsData)
+      } catch (error) {
+        console.error('Error loading projects:', error)
+      } finally {
+        setLoading(false)
+      }
     }
+
+    loadProjects()
+  }, [])
+
+  const categories = [
+    { id: 'all', label: 'All Projects', icon: '🚀' },
+    { id: 'web', label: 'Web Development', icon: '💻' },
+    { id: 'data', label: 'Data Science', icon: '📊' }
   ]
 
+  const filteredProjects = activeCategory === 'all' 
+    ? projects 
+    : projects.filter(p => p.category === activeCategory)
+
+  if (loading) {
+    return (
+      <section className="relative min-h-screen flex items-center justify-center py-20">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading projects...</p>
+        </div>
+      </section>
+    )
+  }
+
   return (
-    <section className="relative min-h-screen flex items-center py-20">
+    <>
+      <SEO 
+        title="Projects - Nardi Portfolio | Full Stack & Data Science Projects"
+        description="Browse my portfolio of Full Stack Development and Data Science projects. Featuring web applications, mobile apps, machine learning models, and data analysis dashboards."
+        keywords="portfolio projects, full stack projects, data science projects, react projects, python projects, machine learning projects"
+        canonical="/projects"
+        ogType="website"
+      />
+      <section className="relative min-h-screen flex items-center py-20">
       <div className="container mx-auto px-6">
-        <h2 className="text-5xl md:text-6xl font-bold text-center mb-16 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent animate-slide-up">
+        <h2 className="text-5xl md:text-6xl font-bold text-center mb-8 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent animate-slide-up">
           Featured Projects
         </h2>
 
+        {/* Category Filter */}
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          {categories.map(cat => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id)}
+              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 flex items-center gap-2 ${
+                activeCategory === cat.id
+                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg scale-105'
+                  : 'bg-white text-gray-700 hover:bg-purple-50 shadow-md'
+              }`}
+            >
+              <span>{cat.icon}</span>
+              <span>{cat.label}</span>
+            </button>
+          ))}
+        </div>
+
         <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {projects.map((project, index) => (
+          {filteredProjects.map((project, index) => (
             <Link
               key={project.id}
               to={`/projects/${project.id}`}
@@ -64,12 +103,12 @@ function Projects() {
                     </p>
                   </div>
                   <div className="text-5xl ml-4 transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
-                    {project.icon}
+                    {project.image || project.icon}
                   </div>
                 </div>
 
                 <div className="flex flex-wrap gap-2 pt-2">
-                  {project.tech.map(tech => (
+                  {(Array.isArray(project.tech) ? project.tech : []).map(tech => (
                     <span
                       key={tech}
                       className="px-4 py-2 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full text-sm font-medium"
@@ -115,6 +154,7 @@ function Projects() {
         </div>
       </div>
     </section>
+    </>
   )
 }
 

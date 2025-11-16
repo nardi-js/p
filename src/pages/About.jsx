@@ -64,6 +64,15 @@ function About() {
     'Basic machine learning models'
   ]
 
+  const webDevSkills = [
+    'Building responsive, beautiful websites',
+    'Modern UI/UX with React & Tailwind CSS',
+    'Interactive components and animations',
+    'Portfolio & landing page development',
+    'Front-end bug fixing and optimization',
+    'Git version control & deployment'
+  ]
+
   return (
     <section className="relative min-h-screen py-20">
       <div className="container mx-auto px-6 max-w-7xl">
@@ -203,6 +212,32 @@ function About() {
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">✓</span>
                     <span className="text-gray-700 text-sm font-medium">{project}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Web Development Passion */}
+        <div className="mb-12">
+          <div className="bg-gradient-to-br from-pink-50 to-orange-50 rounded-3xl p-8 shadow-xl">
+            <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+              <span className="text-3xl">💻</span>
+              Web Development Passion
+            </h3>
+            <p className="text-gray-600 mb-6 leading-relaxed">
+              Creating beautiful and functional websites is one of my favorite hobbies! I leverage AI tools 
+              to accelerate development about 80% of my work is AI-assisted, and I act as an <strong>AI orchestrator</strong>, 
+              guiding and fine-tuning the output to deliver high-quality results. This approach allows me to build 
+              responsive, interactive web applications faster while maintaining clean code and thoughtful design.
+            </p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {webDevSkills.map((skill, i) => (
+                <div key={i} className="bg-white rounded-xl p-4 shadow-md hover:shadow-lg transition-all">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🚀</span>
+                    <span className="text-gray-700 text-sm font-medium">{skill}</span>
                   </div>
                 </div>
               ))}

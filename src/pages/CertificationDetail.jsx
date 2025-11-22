@@ -79,16 +79,16 @@ function CertificationDetail() {
         </Link>
 
         {/* Header */}
-        <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl mb-8 animate-fade-in">
-          <div className="flex items-start gap-6 mb-6">
-            <div className="text-6xl md:text-8xl">{cert.icon}</div>
-            <div className="flex-1">
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-3">
+        <div className="bg-white rounded-3xl p-6 md:p-12 shadow-xl mb-8 animate-fade-in">
+          <div className="flex flex-col md:flex-row items-start gap-6 mb-6">
+            <div className="text-6xl md:text-8xl mx-auto md:mx-0">{cert.icon}</div>
+            <div className="flex-1 text-center md:text-left">
+              <h1 className="text-3xl md:text-5xl font-bold text-gray-800 mb-3">
                 {cert.title}
               </h1>
-              <p className="text-xl text-purple-600 font-semibold mb-2">{cert.issuer}</p>
+              <p className="text-lg md:text-xl text-purple-600 font-semibold mb-2">{cert.issuer}</p>
               <p className="text-gray-600 mb-3">{cert.date}</p>
-              <p className="text-lg text-gray-700 leading-relaxed">{cert.description}</p>
+              <p className="text-base md:text-lg text-gray-700 leading-relaxed">{cert.description}</p>
             </div>
           </div>
 
@@ -106,43 +106,45 @@ function CertificationDetail() {
         </div>
 
         {/* Certificate Image Placeholder */}
-        <div className="bg-gradient-to-br from-purple-400 to-pink-400 rounded-3xl p-12 mb-8 shadow-xl animate-fade-in animation-delay-200">
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-12 text-center">
-            <div className="text-9xl mb-6">{cert.image}</div>
-            <h3 className="text-2xl font-bold text-white mb-6">Certificate of Completion</h3>
+        <div className="bg-gradient-to-br from-purple-400 to-pink-400 rounded-3xl p-6 md:p-12 mb-8 shadow-xl animate-fade-in animation-delay-200">
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-12 text-center">
+            <div className="text-7xl md:text-9xl mb-6">{cert.image}</div>
+            <h3 className="text-xl md:text-2xl font-bold text-white mb-6">Certificate of Completion</h3>
             
             {/* Verify Certificate Button */}
             {cert.credential && (
-              <a
-                href={cert.credential}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-8 py-4 bg-white text-purple-600 rounded-full font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 group"
-              >
-                <svg className="w-6 h-6 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                View Credential
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </a>
+              <div className="flex justify-center">
+                <a
+                  href={cert.credential}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-3 px-6 md:px-8 py-3 md:py-4 bg-white text-purple-600 rounded-full font-bold text-base md:text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 group w-full md:w-auto max-w-xs"
+                >
+                  <svg className="w-5 h-5 md:w-6 md:h-6 group-hover:rotate-12 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>View Credential</span>
+                  <svg className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              </div>
             )}
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-8">
           {/* What I Learned */}
           {cert.whatLearned && cert.whatLearned.length > 0 && (
-            <div className="bg-white rounded-3xl p-8 shadow-xl animate-fade-in-up animation-delay-300">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                <span className="text-3xl">📚</span>
+            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl animate-fade-in-up animation-delay-300">
+              <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-3">
+                <span className="text-2xl md:text-3xl">📚</span>
                 What I Learned
               </h3>
-              <ul className="space-y-3">
+              <ul className="space-y-2 md:space-y-3">
                 {cert.whatLearned.map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-gray-700">
-                    <span className="text-purple-500 text-xl mt-0.5">✓</span>
+                  <li key={i} className="flex items-start gap-3 text-gray-700 text-sm md:text-base">
+                    <span className="text-purple-500 text-lg md:text-xl mt-0.5 flex-shrink-0">✓</span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -152,15 +154,15 @@ function CertificationDetail() {
 
           {/* Projects & Applications */}
           {cert.projects && cert.projects.length > 0 && (
-            <div className="bg-white rounded-3xl p-8 shadow-xl animate-fade-in-up animation-delay-400">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                <span className="text-3xl">🚀</span>
+            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl animate-fade-in-up animation-delay-400">
+              <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-3">
+                <span className="text-2xl md:text-3xl">🚀</span>
                 Applied Projects
               </h3>
-              <ul className="space-y-3">
+              <ul className="space-y-2 md:space-y-3">
                 {cert.projects.map((project, i) => (
-                  <li key={i} className="flex items-start gap-3 text-gray-700">
-                    <span className="text-pink-500 text-xl mt-0.5">▶</span>
+                  <li key={i} className="flex items-start gap-3 text-gray-700 text-sm md:text-base">
+                    <span className="text-pink-500 text-lg md:text-xl mt-0.5 flex-shrink-0">▶</span>
                     <span>{project}</span>
                   </li>
                 ))}
@@ -171,16 +173,16 @@ function CertificationDetail() {
 
         {/* Related Skills */}
         {cert.relatedSkills && cert.relatedSkills.length > 0 && (
-          <div className="bg-white rounded-3xl p-8 shadow-xl mb-8 animate-fade-in-up animation-delay-500">
-            <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-              <span className="text-3xl">🔗</span>
+          <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl mb-8 animate-fade-in-up animation-delay-500">
+            <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-3">
+              <span className="text-2xl md:text-3xl">🔗</span>
               Related Skills & Technologies
             </h3>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 md:gap-3">
               {cert.relatedSkills.map(skill => (
                 <span
                   key={skill}
-                  className="px-5 py-3 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-600 rounded-2xl font-medium border border-purple-200 hover:shadow-lg transition-all"
+                  className="px-3 md:px-5 py-2 md:py-3 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-600 rounded-2xl font-medium border border-purple-200 hover:shadow-lg transition-all text-sm md:text-base"
                 >
                   {skill}
                 </span>

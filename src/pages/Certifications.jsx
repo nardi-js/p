@@ -63,19 +63,19 @@ function Certifications() {
             <Link
               key={cert.id}
               to={`/certifications/${cert.id}`}
-              className="group relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden animate-fade-in-up cursor-pointer"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className="group relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden animate-fade-in-up cursor-pointer flex flex-col"
+              style={{ animationDelay: `${index * 100}ms`, minHeight: '380px' }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-purple-100/50 to-pink-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               
-              <div className="relative z-10">
+              <div className="relative z-10 flex-1 flex flex-col">
                 <div className="text-5xl mb-4">{cert.icon}</div>
                 <h3 className="text-xl font-bold text-gray-800 mb-2">{cert.title}</h3>
                 <p className="text-purple-600 font-medium mb-2">{cert.issuer}</p>
                 <p className="text-sm text-gray-500 mb-3">{cert.date}</p>
-                <p className="text-gray-600 text-sm mb-4">{cert.description}</p>
+                <p className="text-gray-600 text-sm mb-4 flex-1">{cert.description}</p>
                 
-                <div className="flex items-center text-purple-600 font-semibold group-hover:translate-x-2 transition-transform duration-300">
+                <div className="flex items-center text-purple-600 font-semibold group-hover:translate-x-2 transition-transform duration-300 mt-auto">
                   View Details
                   <span className="ml-2 transform group-hover:translate-x-2 transition-transform duration-300">→</span>
                 </div>

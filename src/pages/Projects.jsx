@@ -65,18 +65,19 @@ function Projects() {
         </h2>
 
         {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {categories.map(cat => (
+        <div className="flex flex-wrap justify-center gap-4 mb-12 animate-slide-up animation-delay-200">
+          {categories.map((cat, index) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 flex items-center gap-2 ${
+              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 flex items-center gap-2 animate-fade-in-up ${
                 activeCategory === cat.id
                   ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg scale-105'
-                  : 'bg-white text-gray-700 hover:bg-purple-50 shadow-md'
+                  : 'bg-white text-gray-700 hover:bg-purple-50 shadow-md hover:scale-105'
               }`}
+              style={{ animationDelay: `${300 + index * 100}ms` }}
             >
-              <span>{cat.icon}</span>
+              <span className="transition-transform duration-300 group-hover:scale-110">{cat.icon}</span>
               <span>{cat.label}</span>
             </button>
           ))}
@@ -87,12 +88,12 @@ function Projects() {
             <Link
               key={project.id}
               to={`/projects/${project.id}`}
-              className="group relative bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 cursor-pointer animate-fade-in-up"
-              style={{ animationDelay: `${index * 150}ms` }}
+              className="group relative bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 cursor-pointer animate-fade-in-up flex flex-col"
+              style={{ animationDelay: `${index * 150}ms`, minHeight: '320px' }}
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-10 group-hover:opacity-20 transition-opacity duration-500`} />
               
-              <div className="relative p-8 space-y-4">
+              <div className="relative p-8 space-y-4 flex-1 flex flex-col">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h3 className="text-2xl font-bold text-gray-800 group-hover:text-purple-600 transition-colors duration-300 mb-2">
@@ -118,7 +119,7 @@ function Projects() {
                   ))}
                 </div>
 
-                <div className="pt-4 flex items-center text-purple-600 font-semibold group-hover:translate-x-2 transition-transform duration-300">
+                <div className="pt-4 flex items-center text-purple-600 font-semibold group-hover:translate-x-2 transition-transform duration-300 mt-auto">
                   View Details
                   <span className="ml-2 transform group-hover:translate-x-2 transition-transform duration-300">→</span>
                 </div>

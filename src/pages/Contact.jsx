@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 
 function Contact() {
   const socialLinks = [
@@ -11,7 +12,16 @@ function Contact() {
   ]
 
   return (
-    <section className="relative min-h-screen flex items-center py-20 bg-gradient-to-br from-purple-50/30 via-white to-pink-50/20">
+    <>
+      <SEO 
+        title="Contact Nardi - Get in Touch | Freelance Developer & Data Scientist"
+        description="Connect with Nardi for freelance web development, data science projects, and collaboration opportunities. Available for full stack development, AI integration, and data analysis projects. Reach out via email, LinkedIn, GitHub, Twitter, Instagram, or WhatsApp. Open to internship opportunities and technical consultations."
+        keywords="contact nardi, hire developer, freelance developer contact, web development inquiry, data science consultation, collaboration opportunity, developer for hire, project inquiry, tech collaboration, student developer contact"
+        canonical="/contact"
+        ogType="website"
+        ogImage="https://nardilabs.com/contact-preview.jpg"
+      />
+      <section className="relative min-h-screen flex items-center py-20 bg-gradient-to-br from-purple-50/30 via-white to-pink-50/20">
       <div className="container mx-auto px-6">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-5xl md:text-6xl font-bold text-center mb-8 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent animate-slide-up">
@@ -117,6 +127,7 @@ function Contact() {
         © 2025 All rights reserved
       </div>
     </section>
+    </>
   )
 }
 

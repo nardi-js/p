@@ -1,3 +1,6 @@
+/* =========================================
+   BASE
+========================================= */
 * {
   scroll-behavior: smooth;
 }
@@ -7,7 +10,14 @@
   min-height: 100vh;
 }
 
-/* Animations */
+html {
+  scroll-behavior: smooth;
+}
+
+/* =========================================
+   KEYFRAMES (tetap sama seperti aslinya)
+========================================= */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -110,29 +120,46 @@
   }
 }
 
+/* =========================================
+   ANIMATION UTILITIES (FULL STABIL FIX)
+========================================= */
+
+/* Semua animasi utama pakai "both" agar tidak reset state */
 .animate-fade-in {
-  animation: fadeIn 1s ease-out forwards;
+  animation: fadeIn 1s ease-out both;
+  will-change: transform, opacity;
 }
 
 .animate-slide-up {
-  animation: slideUp 0.8s ease-out forwards;
+  animation: slideUp 0.8s ease-out both;
+  will-change: transform, opacity;
 }
 
 .animate-slide-right {
-  animation: slideRight 0.8s ease-out forwards;
+  animation: slideRight 0.8s ease-out both;
+  will-change: transform, opacity;
 }
 
 .animate-slide-left {
-  animation: slideLeft 0.8s ease-out forwards;
+  animation: slideLeft 0.8s ease-out both;
+  will-change: transform, opacity;
 }
 
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out both;
+  will-change: transform, opacity;
+}
+
+/* Infinite animations (aman karena tidak mengubah layout) */
 .animate-float {
-  animation: float 3s ease-in-out infinite;
+  animation: float 4s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-gradient {
   background-size: 200% 200%;
-  animation: gradient 3s ease infinite;
+  animation: gradient 6s ease infinite;
+  will-change: background-position;
 }
 
 .animate-pulse-slow {
@@ -143,37 +170,24 @@
   animation: pulse-subtle 2s ease-in-out infinite;
 }
 
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out forwards;
-  opacity: 0;
-}
-
 .animate-bounce-subtle {
   animation: bounce-subtle 0.8s ease-in-out;
 }
 
-.animation-delay-200 {
-  animation-delay: 200ms;
+/* Delay (lebih aman via CSS custom class) */
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-400 { animation-delay: 400ms; }
+.animation-delay-600 { animation-delay: 600ms; }
+.animation-delay-1000 { animation-delay: 1000ms; }
+
+/* Extra stabilization */
+.will-change-transform {
+  will-change: transform, opacity;
 }
 
-.animation-delay-400 {
-  animation-delay: 400ms;
-}
-
-.animation-delay-600 {
-  animation-delay: 600ms;
-}
-
-.animation-delay-1000 {
-  animation-delay: 1000ms;
-}
-
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Custom scrollbar */
+/* =========================================
+   SCROLLBAR
+========================================= */
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -189,4 +203,12 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(to bottom, #7c3aed, #c026d3);
+}
+
+/* =========================================
+   ANTI-FLICKER (SAFE)
+========================================= */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

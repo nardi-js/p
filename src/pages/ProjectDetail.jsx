@@ -67,43 +67,43 @@ function ProjectDetail() {
         ogType="article"
         ogImage={project.image || '/og-image.jpg'}
       />
-      <section className="min-h-screen py-20 bg-gradient-to-br from-purple-50/30 to-white">
-      <div className="container mx-auto px-6 max-w-5xl">
+      <section className="min-h-screen py-12 md:py-20 bg-gradient-to-br from-purple-50/30 to-white">
+      <div className="container mx-auto px-4 md:px-6 max-w-5xl">
         <Link 
           to="/projects"
-          className="inline-flex items-center gap-2 text-purple-600 hover:text-purple-700 font-medium mb-8 group transition-all"
+          className="inline-flex items-center gap-2 text-purple-600 hover:text-purple-700 font-medium mb-6 md:mb-8 group transition-all text-sm md:text-base"
         >
           <span className="group-hover:-translate-x-1 transition-transform">←</span>
           Back to Projects
         </Link>
 
-        <div className={`bg-gradient-to-r ${project.gradient} rounded-3xl p-8 md:p-12 mb-8 shadow-xl animate-fade-in`}>
-          <div className="flex items-center gap-6 mb-6">
-            <div className="text-6xl md:text-8xl">{project.image}</div>
+        <div className={`bg-gradient-to-r ${project.gradient} rounded-2xl md:rounded-3xl p-6 md:p-12 mb-6 md:mb-8 shadow-xl animate-fade-in`}>
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 mb-6 text-center md:text-left">
+            <div className="text-5xl md:text-8xl">{project.image}</div>
             <div className="flex-1 text-white">
-              <h1 className="text-4xl md:text-5xl font-bold mb-2">{project.title}</h1>
-              {project.subtitle && <p className="text-xl opacity-90">{project.subtitle}</p>}
+              <h1 className="text-3xl md:text-5xl font-bold mb-2">{project.title}</h1>
+              {project.subtitle && <p className="text-base md:text-xl opacity-90">{project.subtitle}</p>}
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-3 mb-6">
+          <div className="flex flex-wrap gap-2 md:gap-3 mb-6 justify-center md:justify-start">
             {(Array.isArray(project.tech) ? project.tech : []).map(tech => (
-              <span key={tech} className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium">
+              <span key={tech} className="px-3 md:px-4 py-1.5 md:py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium text-sm md:text-base">
                 {tech}
               </span>
             ))}
           </div>
 
           {/* GitHub and Live Demo Buttons */}
-          <div className="flex flex-wrap gap-4 pt-4 border-t border-white/20">
+          <div className="flex flex-col md:flex-row flex-wrap gap-3 md:gap-4 pt-4 border-t border-white/20">
             {project.github && (
               <a
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2 px-6 py-3 bg-white text-purple-600 rounded-full font-semibold hover:bg-opacity-90 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+                className="group inline-flex items-center justify-center gap-2 px-5 md:px-6 py-2.5 md:py-3 bg-white text-purple-600 rounded-full font-semibold hover:bg-opacity-90 transition-all shadow-lg hover:shadow-xl hover:scale-105 text-sm md:text-base w-full md:w-auto"
               >
-                <span className="text-xl">⚡</span>
+                <span className="text-lg md:text-xl">⚡</span>
                 View on GitHub
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </a>
@@ -114,9 +114,9 @@ function ProjectDetail() {
                 href={project.liveDemo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2 px-6 py-3 bg-white/20 backdrop-blur-sm text-white border-2 border-white rounded-full font-semibold hover:bg-white hover:text-purple-600 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+                className="group inline-flex items-center justify-center gap-2 px-5 md:px-6 py-2.5 md:py-3 bg-white/20 backdrop-blur-sm text-white border-2 border-white rounded-full font-semibold hover:bg-white hover:text-purple-600 transition-all shadow-lg hover:shadow-xl hover:scale-105 text-sm md:text-base w-full md:w-auto"
               >
-                <span className="text-xl">🌐</span>
+                <span className="text-lg md:text-xl">🌐</span>
                 Live Demo
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </a>
@@ -124,34 +124,34 @@ function ProjectDetail() {
           </div>
         </div>
 
-        <div className="bg-white rounded-3xl p-8 shadow-xl mb-8 animate-fade-in animation-delay-200">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Overview</h2>
-          <p className="text-lg text-gray-700 leading-relaxed">{project.description}</p>
+        <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-xl mb-6 md:mb-8 animate-fade-in animation-delay-200">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-3 md:mb-4">Overview</h2>
+          <p className="text-base md:text-lg text-gray-700 leading-relaxed">{project.description}</p>
           
           {(project.duration || project.role || project.team || project.year) && (
-            <div className="grid md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-gray-200">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mt-4 md:mt-6 pt-4 md:pt-6 border-t border-gray-200">
               {project.duration && (
                 <div>
-                  <p className="text-sm text-gray-500 mb-1">Duration</p>
-                  <p className="font-semibold text-purple-600">{project.duration}</p>
+                  <p className="text-xs md:text-sm text-gray-500 mb-1">Duration</p>
+                  <p className="font-semibold text-purple-600 text-sm md:text-base">{project.duration}</p>
                 </div>
               )}
               {project.role && (
                 <div>
-                  <p className="text-sm text-gray-500 mb-1">Role</p>
-                  <p className="font-semibold text-purple-600">{project.role}</p>
+                  <p className="text-xs md:text-sm text-gray-500 mb-1">Role</p>
+                  <p className="font-semibold text-purple-600 text-sm md:text-base">{project.role}</p>
                 </div>
               )}
               {project.team && (
                 <div>
-                  <p className="text-sm text-gray-500 mb-1">Team Size</p>
-                  <p className="font-semibold text-purple-600">{project.team}</p>
+                  <p className="text-xs md:text-sm text-gray-500 mb-1">Team Size</p>
+                  <p className="font-semibold text-purple-600 text-sm md:text-base">{project.team}</p>
                 </div>
               )}
               {project.year && (
                 <div>
-                  <p className="text-sm text-gray-500 mb-1">Year</p>
-                  <p className="font-semibold text-purple-600">{project.year}</p>
+                  <p className="text-xs md:text-sm text-gray-500 mb-1">Year</p>
+                  <p className="font-semibold text-purple-600 text-sm md:text-base">{project.year}</p>
                 </div>
               )}
             </div>
@@ -159,17 +159,17 @@ function ProjectDetail() {
         </div>
 
         {(project.features || project.results) && (
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-6 md:mb-8">
             {project.features && Array.isArray(project.features) && project.features.length > 0 && (
-              <div className="bg-white rounded-3xl p-8 shadow-xl animate-fade-in-up animation-delay-300">
-                <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                  <span className="text-3xl">✨</span>
+              <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-xl animate-fade-in-up animation-delay-300">
+                <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
+                  <span className="text-2xl md:text-3xl">✨</span>
                   Key Features
                 </h3>
-                <ul className="space-y-3">
+                <ul className="space-y-2 md:space-y-3">
                   {project.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-3 text-gray-700">
-                      <span className="text-purple-500 text-xl mt-0.5">•</span>
+                    <li key={i} className="flex items-start gap-2 md:gap-3 text-gray-700 text-sm md:text-base">
+                      <span className="text-purple-500 text-lg md:text-xl mt-0.5 flex-shrink-0">•</span>
                       <span>{feature}</span>
                     </li>
                   ))}
@@ -178,16 +178,16 @@ function ProjectDetail() {
             )}
 
             {project.results && Array.isArray(project.results) && project.results.length > 0 && (
-              <div className="bg-white rounded-3xl p-8 shadow-xl animate-fade-in-up animation-delay-400">
-                <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                  <span className="text-3xl">📊</span>
+              <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-xl animate-fade-in-up animation-delay-400">
+                <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
+                  <span className="text-2xl md:text-3xl">📊</span>
                   Results & Impact
                 </h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3 md:gap-4">
                   {project.results.map((result, i) => (
-                    <div key={i} className="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl">
-                      <p className="text-3xl font-bold text-purple-600 mb-1">{result.value}</p>
-                      <p className="text-sm text-gray-600">{result.label}</p>
+                    <div key={i} className="text-center p-3 md:p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl md:rounded-2xl">
+                      <p className="text-2xl md:text-3xl font-bold text-purple-600 mb-1">{result.value}</p>
+                      <p className="text-xs md:text-sm text-gray-600">{result.label}</p>
                     </div>
                   ))}
                 </div>
@@ -197,24 +197,24 @@ function ProjectDetail() {
         )}
 
         {(project.challenges || project.solution) && (
-          <div className="bg-white rounded-3xl p-8 shadow-xl mb-8 animate-fade-in-up animation-delay-500">
+          <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-xl mb-6 md:mb-8 animate-fade-in-up animation-delay-500">
             {project.challenges && (
               <>
-                <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
-                  <span className="text-3xl">🎯</span>
+                <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 md:mb-4 flex items-center gap-2 md:gap-3">
+                  <span className="text-2xl md:text-3xl">🎯</span>
                   Challenge
                 </h3>
-                <p className="text-gray-700 mb-6 leading-relaxed">{project.challenges}</p>
+                <p className="text-gray-700 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">{project.challenges}</p>
               </>
             )}
             
             {project.solution && (
               <>
-                <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
-                  <span className="text-3xl">💡</span>
+                <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 md:mb-4 flex items-center gap-2 md:gap-3">
+                  <span className="text-2xl md:text-3xl">💡</span>
                   Solution
                 </h3>
-                <p className="text-gray-700 leading-relaxed">{project.solution}</p>
+                <p className="text-gray-700 leading-relaxed text-sm md:text-base">{project.solution}</p>
               </>
             )}
           </div>
@@ -223,7 +223,7 @@ function ProjectDetail() {
         <div className="flex justify-center">
           <Link
             to="/projects"
-            className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold text-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            className="group inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold text-base md:text-lg hover:shadow-xl transition-all duration-300 hover:scale-105 w-full md:w-auto max-w-xs md:max-w-none"
           >
             <span className="group-hover:-translate-x-1 transition-transform">←</span>
             View All Projects

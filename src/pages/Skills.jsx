@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { db } from '../firebase/config'
 import { collection, getDocs } from 'firebase/firestore'
+import SEO from '../components/SEO'
 
 function Skills() {
   const [skills, setSkills] = useState([])
@@ -38,20 +39,29 @@ function Skills() {
   }
 
   return (
-    <section className="relative min-h-screen flex items-center py-20 bg-gradient-to-br from-purple-50/30 to-white">
-      <div className="container mx-auto px-6">
-        <h2 className="text-5xl md:text-6xl font-bold text-center mb-16 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent animate-slide-up">
-          Skills & Expertise
-        </h2>
+    <>
+      <SEO 
+        title="Technical Skills & Expertise - Nardi Portfolio | Full Stack & Data Science Capabilities"
+        description="Explore Nardi's comprehensive technical skill set: Expert in React, Python, JavaScript, Node.js, TensorFlow, and modern web technologies. Proficient in full stack development, data science, machine learning, cloud computing (AWS, Azure, Google Cloud), database management, and AI integration. View detailed proficiency levels and project applications."
+        keywords="technical skills, programming languages, react expert, python developer, javascript, node.js, full stack skills, data science tools, machine learning frameworks, tensorflow, pandas, numpy, tailwind css, cloud computing, aws, azure, database skills, mongodb, postgresql, git, docker, api development"
+        canonical="/skills"
+        ogType="website"
+        ogImage="https://nardilabs.com/skills-preview.jpg"
+      />
+      <section className="relative min-h-screen py-20 bg-gradient-to-br from-purple-50/30 to-white">
+        <div className="container mx-auto px-6">
+          <h2 className="text-5xl md:text-6xl font-bold text-center mb-16 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent animate-slide-up">
+            Skills & Expertise
+          </h2>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {skills.map((skill, index) => (
-            <div
-              key={skill.name}
-              className="group relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden animate-fade-in-up"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-100/50 to-pink-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {skills.map((skill, index) => (
+              <div
+                key={skill.name}
+                className="group relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden animate-fade-in-up"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-100/50 to-pink-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               
               <div className="relative z-10">
                 <h3 className="text-xl font-semibold text-gray-800 mb-4">{skill.name}</h3>
@@ -100,6 +110,7 @@ function Skills() {
         </div>
       </div>
     </section>
+    </>
   )
 }
 

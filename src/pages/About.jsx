@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 
 function About() {
   const experiences = [
@@ -74,10 +75,19 @@ function About() {
   ]
 
   return (
-    <section className="relative min-h-screen py-20">
-      <div className="container mx-auto px-6 max-w-7xl">
-        {/* Header */}
-        <div className="text-center mb-16 animate-fade-in">
+    <>
+      <SEO 
+        title="About Nardi - Full Stack Developer & Data Science Student | Professional Background"
+        description="Learn about Nardi's journey as a Computer Science student at Albukhary International University. 3.7+ GPA, 100% scholarship recipient, specializing in Full Stack Development and Data Science. View work experience, education, certifications from Google, AWS, Microsoft, and technical expertise in React, Python, JavaScript, and AI integration. Available for freelance projects and internship opportunities."
+        keywords="about nardi, computer science student, albukhary university, full scholarship student, data science specialization, freelance developer, web development experience, technical skills, google certified, aws certified, react developer, python developer, student portfolio, developer biography, tech background"
+        canonical="/about"
+        ogType="profile"
+        ogImage="https://nardilabs.com/about-preview.jpg"
+      />
+      <section className="relative min-h-screen py-20">
+        <div className="container mx-auto px-6 max-w-7xl">
+          {/* Header */}
+          <div className="text-center mb-16 animate-fade-in">
           <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
             About Me
           </h2>
@@ -112,20 +122,20 @@ function About() {
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-white rounded-xl p-4 text-center shadow-md hover:shadow-lg transition-all">
-                  <div className="text-3xl font-bold text-purple-600">21</div>
-                  <div className="text-sm text-gray-600">Years Old</div>
+                  <div className="text-3xl font-bold text-purple-600">3.5+</div>
+                  <div className="text-sm text-gray-600">GPA</div>
                 </div>
                 <div className="bg-white rounded-xl p-4 text-center shadow-md hover:shadow-lg transition-all">
-                  <div className="text-3xl font-bold text-purple-600">2026</div>
-                  <div className="text-sm text-gray-600">Graduation</div>
+                  <div className="text-3xl font-bold text-purple-600">15+</div>
+                  <div className="text-sm text-gray-600">Projects</div>
                 </div>
                 <div className="bg-white rounded-xl p-4 text-center shadow-md hover:shadow-lg transition-all">
-                  <div className="text-3xl font-bold text-purple-600">🎓</div>
-                  <div className="text-sm text-gray-600">Full Scholar</div>
+                  <div className="text-3xl font-bold text-purple-600">10+</div>
+                  <div className="text-sm text-gray-600">Certifications</div>
                 </div>
                 <div className="bg-white rounded-xl p-4 text-center shadow-md hover:shadow-lg transition-all">
-                  <div className="text-3xl font-bold text-purple-600">🇮🇩</div>
-                  <div className="text-sm text-gray-600">Indonesian</div>
+                  <div className="text-3xl font-bold text-purple-600">100%</div>
+                  <div className="text-sm text-gray-600">Scholarship</div>
                 </div>
               </div>
             </div>
@@ -314,6 +324,7 @@ function About() {
         </div>
       </div>
     </section>
+    </>
   )
 }
 

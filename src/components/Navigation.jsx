@@ -1,6 +1,11 @@
 import { NavLink } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 
 function Navigation() {
+  const [isVisible, setIsVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
+  const [scrollTimeout, setScrollTimeout] = useState(null)
+
   const navItems = [
     { path: '/', icon: '🏠', label: 'Home' },
     { path: '/about', icon: '👤', label: 'About' },
@@ -9,6 +14,39 @@ function Navigation() {
     { path: '/certifications', icon: '🎓', label: 'Certificates' },
     { path: '/contact', icon: '✉️', label: 'Contact' }
   ]
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      
+      // Show navigation when scrolling
+      if (Math.abs(currentScrollY - lastScrollY) > 10) {
+        setIsVisible(true)
+        setLastScrollY(currentScrollY)
+      }
+
+      // Clear existing timeout
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout)
+      }
+
+      // Hide navigation after 2 seconds of no scrolling
+      const timeout = setTimeout(() => {
+        setIsVisible(false)
+      }, 2000)
+
+      setScrollTimeout(timeout)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout)
+      }
+    }
+  }, [lastScrollY, scrollTimeout])
 
   return (
     <>
@@ -50,37 +88,41 @@ function Navigation() {
         </div>
       </nav>
 
-      {/* Mobile Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-white/95 backdrop-blur-lg border-t border-purple-100 shadow-2xl shadow-purple-200/50">
-        <div className="flex justify-around items-center px-2 py-2">
-          {navItems.map(item => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                `flex flex-col items-center justify-center gap-0.5 px-2 py-1.5 rounded-xl transition-all duration-300 min-w-0 ${
-                  isActive
-                    ? 'bg-gradient-to-br from-purple-500 to-purple-600 text-white scale-105 shadow-lg shadow-purple-300/50'
-                    : 'text-gray-600 hover:text-purple-600'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <span className={`text-xl transition-all duration-300 ${
-                    isActive ? 'scale-110 animate-bounce-subtle' : ''
-                  }`}>
-                    {item.icon}
-                  </span>
-                  <span className={`text-[10px] font-medium transition-all duration-300 whitespace-nowrap ${
-                    isActive ? 'text-white' : 'text-gray-600'
-                  }`}>
-                    {item.label}
-                  </span>
-                </>
-              )}
-            </NavLink>
-          ))}
+      {/* Mobile Floating Navigation */}
+      <nav className={`fixed left-4 right-4 bottom-6 z-40 md:hidden transition-all duration-500 ease-in-out ${
+        isVisible ? 'translate-y-0 opacity-100' : 'translate-y-32 opacity-0'
+      }`}>
+        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl shadow-purple-300/50 border border-purple-100 px-3 py-3">
+          <div className="flex justify-around items-center">
+            {navItems.map(item => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                className={({ isActive }) =>
+                  `flex flex-col items-center justify-center gap-0.5 px-2 py-1.5 rounded-xl transition-all duration-300 min-w-0 ${
+                    isActive
+                      ? 'bg-gradient-to-br from-purple-500 to-purple-600 text-white scale-105 shadow-lg shadow-purple-300/50'
+                      : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50'
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    <span className={`text-xl transition-all duration-300 ${
+                      isActive ? 'scale-110 animate-bounce-subtle' : ''
+                    }`}>
+                      {item.icon}
+                    </span>
+                    <span className={`text-[10px] font-medium transition-all duration-300 whitespace-nowrap ${
+                      isActive ? 'text-white' : 'text-gray-600'
+                    }`}>
+                      {item.label}
+                    </span>
+                  </>
+                )}
+              </NavLink>
+            ))}
+          </div>
         </div>
       </nav>
     </>

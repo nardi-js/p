@@ -5,10 +5,12 @@ function Home() {
   return (
     <>
       <SEO 
-        title="Nardi - Full Stack Developer & Data Scientist Portfolio"
-        description="Welcome to Nardi's portfolio. AI-assisted developer specializing in Full Stack Development, Data Science, Machine Learning, and Cloud Technologies. Building simple, functional tech solutions."
-        keywords="nardi, full stack developer, data scientist, AI developer, machine learning, react, python, portfolio"
+        title="Nardi - Full Stack Developer & Data Scientist | Modern Web & AI Solutions Portfolio"
+        description="Welcome to Nardi's professional portfolio. Award-winning Computer Science student (3.7+ GPA, Full Scholarship) specializing in Full Stack Development, Data Science, and AI Integration. Explore 15+ innovative projects, 10+ professional certifications from Google, AWS, and Microsoft. Expert in React, Python, JavaScript, Machine Learning, and Cloud Technologies. Available for freelance projects and collaborations."
+        keywords="nardi portfolio, full stack developer portfolio, data scientist portfolio, computer science student, ai developer, machine learning projects, react developer, python developer, web development portfolio, data analysis, cloud computing, albukhary university, malaysian developer, indonesian developer, freelance developer, professional portfolio, tech portfolio 2025, student developer, scholarship student"
         canonical="/"
+        ogType="website"
+        ogImage="https://portfolio.nardilabs.com/home-preview.jpg"
       />
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-purple-50/30 via-white to-pink-50/20" />
@@ -26,10 +28,10 @@ function Home() {
             Building simple, functional tech solutions • AI-assisted developer • Fast learner • Consistent worker
           </p>
           
-          <div className="flex flex-col md:flex-row gap-4 justify-center items-center mt-8">
+          <div className="flex flex-col md:flex-row gap-4 justify-center items-center mt-8 animate-slide-up animation-delay-600">
             <Link 
               to="/projects"
-              className="group relative inline-block px-10 py-5 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-full font-semibold text-lg overflow-hidden transform hover:scale-105 transition-all duration-300 shadow-2xl shadow-purple-300/50 hover:shadow-purple-400/60 animate-slide-up animation-delay-600"
+              className="group relative inline-block px-10 py-5 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-full font-semibold text-lg overflow-hidden transform hover:scale-105 transition-all duration-300 shadow-2xl shadow-purple-300/50 hover:shadow-purple-400/60"
             >
               <span className="relative z-10 flex items-center gap-2">
                 View My Work
@@ -40,7 +42,7 @@ function Home() {
             
             <Link 
               to="/about"
-              className="group relative inline-block px-10 py-5 bg-white text-purple-600 border-2 border-purple-600 rounded-full font-semibold text-lg overflow-hidden transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl animate-slide-up animation-delay-700"
+              className="group relative inline-block px-10 py-5 bg-white text-purple-600 border-2 border-purple-600 rounded-full font-semibold text-lg overflow-hidden transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl"
             >
               <span className="relative z-10 flex items-center gap-2">
                 Learn About Me
@@ -51,8 +53,9 @@ function Home() {
         </div>
       </div>
 
-      <div className="absolute top-20 left-20 w-72 h-72 bg-purple-300 rounded-full filter blur-3xl opacity-20 animate-pulse-slow" />
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-pink-300 rounded-full filter blur-3xl opacity-20 animate-pulse-slow animation-delay-1000" />
+      <div className="absolute top-20 left-20 w-96 h-96 bg-purple-400 rounded-full filter blur-3xl opacity-40 animate-pulse-slow" />
+      <div className="absolute bottom-20 right-20 w-[28rem] h-[28rem] bg-pink-400 rounded-full filter blur-3xl opacity-40 animate-pulse-slow animation-delay-1000" />
+      <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-purple-300 rounded-full filter blur-3xl opacity-30 animate-pulse-slow animation-delay-600" />
     </section>
     </>
   )

@@ -1,11 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useLocation } from 'react-router-dom'
 
 function PageWrapper({ children }) {
+  const location = useLocation()
+  const isHomePage = location.pathname === '/'
   const [ripples, setRipples] = useState([])
   const [sparkles, setSparkles] = useState([])
   const [flowers, setFlowers] = useState([])
   
-  const [particles] = useState(() =>
+  const particles = useMemo(() =>
     Array.from({ length: 30 }, () => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
@@ -13,7 +16,7 @@ function PageWrapper({ children }) {
       speedX: (Math.random() - 0.5) * 0.5,
       speedY: (Math.random() - 0.5) * 0.5,
       opacity: Math.random() * 0.3 + 0.1
-    }))
+    })), []
   )
 
   const [animatedParticles, setAnimatedParticles] = useState(particles)
@@ -32,18 +35,39 @@ function PageWrapper({ children }) {
     return () => clearInterval(interval)
   }, [])
 
-  // Auto-generate random blooming flowers
+  // Auto-generate random blooming flowers (only on home page)
   useEffect(() => {
+    if (!isHomePage) {
+      setFlowers([]) // Clear flowers when leaving home page
+      return
+    }
+    
+    const isMobile = window.innerWidth < 768
+    
     const generateFlower = () => {
+      // Generate position avoiding center area (larger margin on mobile)
+      let x, y
+      const centerMargin = isMobile ? 0.4 : 0.3 // 40% margin on mobile, 30% on desktop
+      const screenWidth = window.innerWidth
+      const screenHeight = window.innerHeight
+      
+      do {
+        x = Math.random() * screenWidth
+        y = Math.random() * screenHeight
+      } while (
+        x > screenWidth * centerMargin && x < screenWidth * (1 - centerMargin) &&
+        y > screenHeight * centerMargin && y < screenHeight * (1 - centerMargin)
+      )
+      
       const newFlower = {
         id: Date.now() + Math.random(),
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
+        x,
+        y,
         scale: 0,
         opacity: 1,
         rotation: Math.random() * 360,
-        petalColor: Math.random() > 0.5 ? 'bg-purple-400' : 'bg-pink-400',
-        size: 40 + Math.random() * 30 // Random size between 40-70px
+        petalColor: Math.random() > 0.5 ? 'bg-purple-300' : 'bg-pink-300',
+        size: isMobile ? 30 + Math.random() * 20 : 50 + Math.random() * 40 // Smaller on mobile
       }
       
       setFlowers(prev => [...prev, newFlower])
@@ -54,17 +78,25 @@ function PageWrapper({ children }) {
       }, 3000)
     }
 
-    // Generate flowers every 1-3 seconds randomly
+    // Less frequent on mobile - every 2-4 seconds on mobile, 0.5-1.5 on desktop
     const scheduleNextFlower = () => {
-      const delay = 1000 + Math.random() * 2000
+      const delay = isMobile 
+        ? 2000 + Math.random() * 2000  // Mobile: 2-4 seconds
+        : 500 + Math.random() * 1000    // Desktop: 0.5-1.5 seconds
       setTimeout(() => {
         generateFlower()
         scheduleNextFlower()
       }, delay)
     }
 
-    scheduleNextFlower()
-  }, [])
+    const timeoutId = scheduleNextFlower()
+    
+    // Cleanup function
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId)
+      setFlowers([]) // Clear all flowers on unmount
+    }
+  }, [isHomePage])
 
   // Animate flowers blooming and fading
   useEffect(() => {
@@ -191,8 +223,8 @@ function PageWrapper({ children }) {
         ))}
       </div>
 
-      {/* Random Blooming Flowers */}
-      {flowers.map(flower => (
+      {/* Random Blooming Flowers - Only visible on home page */}
+      {isHomePage && flowers.map(flower => (
         <div
           key={flower.id}
           className="fixed pointer-events-none z-10"
@@ -200,8 +232,9 @@ function PageWrapper({ children }) {
             left: `${flower.x}px`,
             top: `${flower.y}px`,
             transform: `translate(-50%, -50%) scale(${flower.scale}) rotate(${flower.rotation}deg)`,
-            opacity: flower.opacity,
-            transition: 'all 0.1s ease-out'
+            opacity: flower.opacity * 0.6, // Reduced overall opacity to 60%
+            transition: 'all 0.1s ease-out',
+            filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.2))' // Reduced glow effect
           }}
         >
           {/* Flower petals */}
@@ -213,11 +246,11 @@ function PageWrapper({ children }) {
                 width: `${flower.size * 0.6}px`,
                 height: `${flower.size}px`,
                 transform: `rotate(${(360 / 8) * i}deg) translateY(-${flower.size * 0.4}px)`,
-                transformOrigin: 'center bottom'
+                transformOrigin: 'center bottom',
+                boxShadow: '0 0 5px rgba(168, 85, 247, 0.15)' // Reduced shadow intensity
               }}
             />
           ))}
-          {/* Flower center */}
           </div>
       ))}
 
